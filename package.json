@@ -1,0 +1,16 @@
+{
+  "name": "superAgent_cheerio",
+  "version": "0.0.1",
+  "description": "学习爬虫",
+  "main": "index.js",
+  "scripts": {
+    "test": "node /bin/index.js"
+  },
+  "author": "spean90",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.18.0",
+    "express": "^4.10.6",
+    "superagent": "^0.21.0"
+  }
+}
