@@ -1,6 +1,8 @@
 var express = require('express');
 var superagent = require('superagent');
 var cheerio = require('cheerio');
+var ProductInfo = require('./modal/productInfo')
+
 var app = express();
 
 //app.get('/',function(req,res,next) {
@@ -80,12 +82,18 @@ app.get('/',function(req,res,next) {
                         var pid = $('.product_name');
                         var li = $('div.right>ul>li').get(1);
                         console.log(pid.text()+" : "+$(li).find('div').text());
+                        var pro = {
+                            pname : pid.text(),
+                            price : $(li).find('div').text(),
+                            addTime : new Date()
+                        }
+                        new ProductInfo(pro).save(function(){});
                     });
                 });
-               // res.send(items);
+
             })
     }
-
+ res.send("ok");
 })
 module.exports = app;
 
