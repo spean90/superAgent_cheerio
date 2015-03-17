@@ -53,8 +53,26 @@ var app = express();
 //        })
 //})
 app.get('/',function(req,res,next) {
+    var page = '';
 
-    for(var i=1;i<=56;i++){
+    superagent.get('http://www.aihuishou.com/shouji')
+        .end(function(err,sres) {
+            if(err){
+                return next(err);
+            }
+            var $ = cheerio.load(sres.text);
+            page = $('div.page').text().substr(-2);
+            console.log(page);
+            dowork(page);
+        });
+
+
+
+ res.send("ok");
+});
+
+dowork = function(page) {
+    for(var i=54;i<=page;i++){
         superagent.get('http://www.aihuishou.com/product/search?cid=1&bid=0&keyword=&pageIndex='+i)
             .end(function(err,sres) {
                 if(err){
@@ -65,7 +83,7 @@ app.get('/',function(req,res,next) {
                 // 剩下就都是 jquery 的内容了
                 var $ = cheerio.load(sres.text);
                 var items = [];
-                console.log($('ul.products>li>a').length);
+               // console.log($('ul.products>li>a').length);
                 $('ul.products>li>a').each(function (idx, element) {
                     items.push({
                         href : $(element).attr('href')
@@ -73,7 +91,7 @@ app.get('/',function(req,res,next) {
                 });
 
                 items.forEach(function(e,id) {
-                    console.log(e.href);
+                    //console.log(e.href);
                     superagent.get('http://www.aihuishou.com'+ e.href).end(function(err,sres) {
                         if(err){
                             return next(err);
@@ -93,7 +111,7 @@ app.get('/',function(req,res,next) {
 
             })
     }
- res.send("ok");
-})
+}
+
 module.exports = app;
 
